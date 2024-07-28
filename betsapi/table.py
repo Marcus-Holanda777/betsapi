@@ -3,7 +3,11 @@ from urllib.request import (
     Request
 )
 from bs4 import BeautifulSoup
-from betsapi.utils import get_period
+from betsapi.utils import (
+    get_period, 
+    compile_c_path, 
+    compile_link_clube
+)
 import pandas as pd
 from collections import defaultdict
 import re
@@ -43,7 +47,7 @@ def create_table(
         clubes = tuple(
             map(
                 lambda tag: tag.get_text().strip(), 
-                nomes.find_all('a', href=re.compile(r'^/t/\d+/.+$'))
+                nomes.find_all('a', href=compile_link_clube)
             )
         )
         pontos = (nomes.span.get_text().strip(), )
@@ -85,7 +89,7 @@ def create_table(
 
     for j, [values] in dfs.items():
         file_totais += 1
-        name = j.replace('(', '').replace(')', '')
+        name = compile_c_path.sub('', j)
         file = f'{name}_{day:%Y%m%d_%H_%M_%S}.xlsx'
 
         if not os.path.isdir(name):

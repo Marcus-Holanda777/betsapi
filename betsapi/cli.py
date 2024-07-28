@@ -171,5 +171,5 @@ def link(
             create_table(terminal, headers, url)
             
     except Exception as e:
-        lt.msg_error(terminal, "Falha no Web Scraping")
+        lt.msg_error(terminal, e)
         raise typer.Exit()
