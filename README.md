@@ -5,6 +5,12 @@ como partidas, horários, odds e outros dados relevantes, utilizando técnicas d
 
 ---
 
+## Instalação
+
+```bash
+pip install "git+https://github.com/Marcus-Holanda777/betsapi.git"
+```
+
 ## Como usar ?
 
 ```diff
