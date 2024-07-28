@@ -8,7 +8,8 @@ como partidas, horários, odds e outros dados relevantes, utilizando técnicas d
 ## Como usar ?
 
 ```diff
-- O site exige autenticação e gerenciamento de cookies, por isso a cada execução será gerado um novo arquivo `json` com o `Headers` atualizado.
+- O site exige autenticação e gerenciamento de cookies. 
+- A cada execução será gerado um novo arquivo `json` com o `Headers` atualizado.
 ```
 
 Para usar, basta chamar o app `betsapi`, e depois digitar os comandos.
