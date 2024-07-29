@@ -11,6 +11,10 @@ from typing import Union, Callable
 import typer
 from betsapi import __app_name__
 from pathlib import Path
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from dateutil.parser import parse
+
 
 WebDriverOrWebElement = Union[WebDriver, WebElement]
 
@@ -128,16 +132,56 @@ def create_headers(txt_email, txt_login):
 
     headers |= {'Cookie': cookies}
 
+    dt_format = datetime.now() + relativedelta(hours=6)
+    headers |= {"Expira": f"{dt_format:%Y-%m-%d %H:%M:%S}"}
+
     with open('config.json', 'w') as fp:
         json.dump(headers, fp, indent=4)
 
 
-def main_heades(email: str, login: str) -> dict:
-    create_headers(
-        email,
-        login
-    )
+def read_config() -> dict | None:
+    try:
+        with open('config.json', 'r') as fp:
+            headers = json.load(fp)
+        return headers
+    except:
+        return
 
-    with open('config.json', 'r') as fp:
-        headers = json.load(fp)
-    return headers
+
+def main_heades(
+    email: str, 
+    login: str,
+    force: bool = False
+) -> dict:
+    
+    headers = read_config()
+
+    if force or headers is None:
+        create_headers(
+            email,
+            login
+        )
+        headers = read_config()
+        headers.pop('Expira', None)
+
+        return headers
+    
+    if headers:
+        default = datetime.now()
+        expira = parse(
+            headers.get('Expira', f'{default:%Y-%m-%d %H:%M:%S}')
+        )
+        
+        if datetime.now() > expira:
+            create_headers(email, login)
+            
+            headers = read_config()
+            headers.pop('Expira', None)
+
+            return headers
+        
+        headers.pop('Expira', None)
+        return headers
+
+
+

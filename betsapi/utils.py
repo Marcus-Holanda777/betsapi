@@ -3,7 +3,10 @@ import pytz
 from datetime import datetime
 from functools import reduce
 
-compile_c_path = re.compile(r"""[\\/:\*\?<>|"]""", re.VERBOSE)
+compile_c_path = re.compile(
+    r"""[\\/:\*\?<>|"]""", 
+    re.VERBOSE
+)
 
 compile_period = re.compile(
     r"""

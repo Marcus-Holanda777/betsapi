@@ -109,13 +109,13 @@ def request_pagina(
         ]
 
         table_link = {
+            'link': links,
             'period': periods,
             'clube_left': [clube[0] for clube in clubes],
             'clube_right': [clube[1] for clube in clubes],
             'point_left': [point[0] for point in points],
             'point_right': [point[1] for point in points],
-            'page': [link_home] * len(periods),
-            'link': links
+            'page': [link_home] * len(periods)
         }
         
     except HTTPError as e:

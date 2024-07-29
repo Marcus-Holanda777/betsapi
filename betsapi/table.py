@@ -10,7 +10,6 @@ from betsapi.utils import (
 )
 import pandas as pd
 from collections import defaultdict
-import re
 import os
 from time import sleep
 from openpyxl import open as open_pyxl
@@ -139,7 +138,7 @@ def main_tables(
         links = (
             col.value 
             for row in rows 
-            for col in islice(row, 6, 7)
+            for col in islice(row, 0, 1)
             )
         
         totais = []
