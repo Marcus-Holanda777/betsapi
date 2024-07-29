@@ -35,8 +35,18 @@ Digite sua senha 😎:
 page options: --start -s, --end -e, --version -v, --help -h
 ```
 
+```bash
+betsapi page "1234/Futebol" -s 1 -e 10
+```
+
 3. link
-> Exporta os dados a partir de um link.
+> Exporta os dados a partir de um link ou uma planilha.
 ```bash
 link args: url [required], options: --version -v, --help -h
+```
+
+```bash
+betsapi link "c:\links.xlsx"
+
+betsapi link "https://url"
 ```
