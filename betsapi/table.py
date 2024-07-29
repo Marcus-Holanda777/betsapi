@@ -18,6 +18,8 @@ from itertools import islice
 from rich.console import Console
 from rich.tree import Tree
 from rich.filesize import decimal
+from datetime import datetime
+import uuid
 
 
 def create_table(
@@ -89,7 +91,10 @@ def create_table(
     for j, [values] in dfs.items():
         file_totais += 1
         name = compile_c_path.sub('', j)
-        file = f'{name}_{day:%Y%m%d_%H_%M_%S}.xlsx'
+
+        now = datetime.now().strftime("%Y%m%d%H%M%S")
+        key = f"{now}{str(uuid.uuid4())}"
+        file = f'{key}_div_{name}_{day:%Y%m%d_%H_%M_%S}.xlsx'
 
         if not os.path.isdir(name):
             os.mkdir(name)
