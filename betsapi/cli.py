@@ -11,6 +11,7 @@ from betsapi.links import main_links
 from betsapi.table import main_tables, create_table
 from betsapi.utils import compose
 from functools import partial
+from pathlib import Path
 
 
 app = typer.Typer()
@@ -58,6 +59,15 @@ type_url = Annotated[
     )
 ]
 
+type_secret = Annotated[
+    bool,
+    typer.Option(
+        '--obscure',
+        '-o',
+        help='esconde senha'
+    )
+]
+
 
 @app.callback(invoke_without_command=True)
 def main(
@@ -80,10 +90,11 @@ def main(
     help='Inicializa as configurações do sistema'
 )
 def init(
-    version: typer_version = None
+    version: typer_version = None,
+    obscure: type_secret = False
 ):
     
-    data = lt.input_start_json(terminal)
+    data = lt.input_start_json(terminal, obscure)
     file = conf.init_start_json(**data)
 
     if not file:
@@ -103,8 +114,7 @@ def page(
 ):
     try:
         if not conf.is_start_json():
-            lt.msg_error(terminal, "Arquivo de config não existe !")
-            raise typer.Exit()
+            raise OSError("Arquivo de config não existe !")
         
         data = conf.read_start_json()
 
@@ -146,8 +156,7 @@ def link(
 ):
     try:
         if not conf.is_start_json():
-            lt.msg_error(terminal, "Arquivo de config não existe !")
-            raise typer.Exit()
+            raise OSError("Arquivo config não existe")
         
         data = conf.read_start_json()
 
@@ -166,9 +175,19 @@ def link(
         ) as sta:
                 
             # NOTE: Pesquisa e exporta as tabelas
-            terminal.rule("LOGS - url", style='magenta', characters='*')
-            terminal.log(f'🚀 URL - {url}')
-            create_table(terminal, headers, url)
+            terminal.rule("LOGS - url | file", style='magenta', characters='*')
+            terminal.log(f'🚀 OBJ - {url}')
+
+            if (file := Path(url)).is_file():
+                if file.suffix == '.xlsx':
+                   main_tables(terminal, headers, url)
+                else:
+                    raise TypeError('Arquivo deve ser .xlsx')
+            else:
+                if url.startswith('https'): 
+                   create_table(terminal, headers, url)
+                else:
+                    raise SyntaxError("Favor verificar url !")
             
     except Exception as e:
         lt.msg_error(terminal, e)

@@ -87,7 +87,8 @@ def msg_error(
 
 
 def input_start_json(
-    terminal: Console
+    terminal: Console,
+    password: bool
 ) -> dict:
     
     import re
@@ -123,7 +124,7 @@ def input_start_json(
         login = Prompt.ask(
             "Digite sua senha :sunglasses:",
             console=terminal,
-            password=True
+            password=password
         )
 
         if len(login) > 5:
