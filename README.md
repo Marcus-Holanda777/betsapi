@@ -22,18 +22,21 @@ Para usar, basta chamar o app `betsapi`, e depois digitar os comandos.
 
 1. init
 > Faz a configuração inicial do programa.
-```js
-init options: --version -v, --help -h
+```bash
+init options: --version -v, --obscure -o,--help -h
+
+Digite seu email ✉: teste@init.com
+Digite sua senha 😎:
 ```
 
 2. page
-> Exporta os dados a partir de um intervalo de `paginas`.
-```js
+> Exporta os dados a partir de uma liga e intervalo de paginas `paginas`.
+```bash
 page options: --start -s, --end -e, --version -v, --help -h
 ```
 
 3. link
 > Exporta os dados a partir de um link.
-```js
+```bash
 link args: url [required], options: --version -v, --help -h
 ```

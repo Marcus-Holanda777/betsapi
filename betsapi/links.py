@@ -1,6 +1,6 @@
 from urllib.request import urlopen, Request
 from urllib.error import HTTPError
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote_plus
 from bs4 import BeautifulSoup
 import re
 import pandas as pd
@@ -19,8 +19,7 @@ from rich.console import Console
 
 URL_PAGE = (
     "https://pt.betsapi.com"
-    "/le/25067"
-    "/Ebasketball-H2H-GG-League--4x5mins/p.{page}"
+    "/le/{league}/p.{page}"
 )
 
 
@@ -64,10 +63,13 @@ def get_link(link_home: str, link: str):
 def request_pagina(
     terminal: Console, 
     headers: dict, 
+    league: str,
     page: int
 ):
-    
-    link_home = URL_PAGE.format(page=page)
+    num, lig = league.split('/')
+
+    league = f"{num}/{quote_plus(lig)}"
+    link_home = URL_PAGE.format(league=league, page=page)
 
     endpoint = Request(
         link_home,
@@ -131,6 +133,7 @@ def request_pagina(
 def main_links(
     terminal: Console, 
     headers: dict, 
+    league: str,
     args: tuple[int, int]
 ) -> str:
 
@@ -142,7 +145,7 @@ def main_links(
             [
             *map(
                     pd.DataFrame, 
-                    chain([*map(partial(request_pagina, terminal, headers), range(page_start, page_end + 1))])
+                    chain([*map(partial(request_pagina, terminal, headers, league), range(page_start, page_end + 1))])
                 )
             ]
         )

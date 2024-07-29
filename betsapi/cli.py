@@ -59,6 +59,14 @@ type_url = Annotated[
     )
 ]
 
+type_league = Annotated[
+    str,
+    typer.Argument(
+        help='Definir liga',
+        metavar='NUMERO/Nome_da_liga'
+    )
+]
+
 type_secret = Annotated[
     bool,
     typer.Option(
@@ -108,6 +116,7 @@ def init(
     help='Exporta os dados a partir de um intervalo de paginas'
 )
 def page(
+    league: type_league,
     start: type_start = 1,
     end: type_end = 5,
     version: typer_version = None
@@ -136,7 +145,7 @@ def page(
             terminal.rule("LOGS - page", style='magenta', characters='*')
             terminal.log(f'📕 Intervalo de paginas {start} - {end}')
             main_gera_base = compose(
-                partial(main_links, terminal, headers),
+                partial(main_links, terminal, headers, league),
                 partial(main_tables, terminal, headers)
             )
 
